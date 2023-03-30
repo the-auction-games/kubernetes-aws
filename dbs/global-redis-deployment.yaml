@@ -1,0 +1,44 @@
+# Global Redis DB (Actors & PubSub)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: global-redis-db-deploy
+  labels:
+    app: global-redis-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: global-redis-db
+  template:
+    metadata:
+      labels:
+        app: global-redis-db
+    spec:
+      containers:
+      - name: global-redis-db
+        image: redis:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Global Redis DB Service (Actors & PubSub)
+apiVersion: v1
+kind: Service
+metadata:
+  name: global-redis-db-service
+spec:
+  selector:
+    app: global-redis-db
+  ports:
+  - name: redis-port
+    port: 6379
+    targetPort: 6379
+  type: ClusterIP

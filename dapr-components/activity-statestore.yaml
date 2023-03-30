@@ -1,0 +1,12 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: activity-statestore
+spec:
+  type: state.postgresql
+  version: v1
+  metadata:
+    - name: connectionString
+      value: "host=activity-db-service.default.svc.cluster.local user=postgres password=password port=5432 connect_timeout=10 database=activity"
+scopes:
+- activity-api

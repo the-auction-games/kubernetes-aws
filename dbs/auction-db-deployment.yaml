@@ -1,0 +1,47 @@
+# Auction DB Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-db-deploy
+  labels:
+    app: auction-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auction-db
+  template:
+    metadata:
+      labels:
+        app: auction-db
+    spec:
+      containers:
+      - name: auction-db
+        image: joelsmith2019/auction-db:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 27017
+        env:
+          - name: DB_NAME
+            value: "auction"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Auction DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-db-service
+spec:
+  selector:
+    app: auction-db
+  ports:
+  - name: mongo-port
+    port: 27017
+    targetPort: 27017
+  type: ClusterIP

@@ -1,0 +1,8 @@
+# Dapr sidecar injection for ingress-nginx
+controller:
+  podAnnotations:
+    dapr.io/enabled: "true"
+    dapr.io/app-id: "ingress-nginx"
+    dapr.io/app-port: "80"
+    dapr.io/sidecar-listen-addresses: "[::],0.0.0.0"
+    dapr.io/config: "tracing"

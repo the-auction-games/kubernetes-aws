@@ -1,0 +1,35 @@
+# Activity API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activity-api-deploy
+  labels:
+    app: activity-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activity-api
+  template:
+    metadata:
+      labels:
+        app: activity-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "activity-api"
+        dapr.io/app-port: "8080"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: activity-api
+        image: joelsmith2019/activity-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

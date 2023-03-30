@@ -1,0 +1,16 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: auction-statestore
+spec:
+  type: state.mongodb
+  version: v1
+  metadata:
+  - name: host
+    value: "auction-db-service.default.svc.cluster.local:27017"
+  - name: databaseName
+    value: auction
+  - name: collectionName
+    value: state
+scopes:
+- auction-api

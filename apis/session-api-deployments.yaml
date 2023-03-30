@@ -1,0 +1,35 @@
+# Session API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: session-api-deploy
+  labels:
+    app: session-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: session-api
+  template:
+    metadata:
+      labels:
+        app: session-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "session-api"
+        dapr.io/app-port: "3000"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: session-api
+        image: joelsmith2019/session-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

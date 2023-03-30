@@ -1,0 +1,35 @@
+# Account API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-api-deploy
+  labels:
+    app: account-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-api
+  template:
+    metadata:
+      labels:
+        app: account-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "account-api"
+        dapr.io/app-port: "8000"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: account-api
+        image: joelsmith2019/account-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

@@ -1,0 +1,43 @@
+# Nginx Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  # Ingress for Web Application (Load balance on service)
+  - host: the-auction-games.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-app-service
+            port:
+              number: 80
+  # Ingress for Sidecar API
+  - host: api.the-auction-games.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ingress-nginx-dapr
+            port:
+              number: 80
+  # Ingress for Zipkin
+  - host: zipkin.the-auction-games.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: zipkin-service
+            port:
+              number: 80

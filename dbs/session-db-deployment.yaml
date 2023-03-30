@@ -1,0 +1,44 @@
+# Session DB Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: session-db-deploy
+  labels:
+    app: session-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: session-db
+  template:
+    metadata:
+      labels:
+        app: session-db
+    spec:
+      containers:
+      - name: session-db
+        image: redis:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Session DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: session-db-service
+spec:
+  selector:
+    app: session-db
+  ports:
+  - name: redis-port
+    port: 6379
+    targetPort: 6379
+  type: ClusterIP

@@ -1,0 +1,47 @@
+# Activity DB Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activity-db-deploy
+  labels:
+    app: activity-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activity-db
+  template:
+    metadata:
+      labels:
+        app: activity-db
+    spec:
+      containers:
+      - name: activity-db
+        image: joelsmith2019/activity-db:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+        env:
+          - name: DB_NAME
+            value: "activity"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Activity DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: activity-db-service
+spec:
+  selector:
+    app: activity-db
+  ports:
+  - name: postgres-port
+    port: 5432
+    targetPort: 5432
+  type: ClusterIP

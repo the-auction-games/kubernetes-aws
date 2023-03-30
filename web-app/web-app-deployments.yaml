@@ -1,0 +1,54 @@
+# Web App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deploy
+  labels:
+    app: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "web-app"
+        dapr.io/app-port: "80"
+    spec:
+      containers:
+      - name: web-app
+        image: joelsmith2019/auction-web-app:kube
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: SIDECAR_HOST
+          value: "api.the-auction-games.com"
+        - name: SIDECAR_PORT
+          value: "80"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Web App Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP

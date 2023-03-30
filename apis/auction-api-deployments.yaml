@@ -1,0 +1,35 @@
+# Auction API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-api-deploy
+  labels:
+    app: auction-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auction-api
+  template:
+    metadata:
+      labels:
+        app: auction-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "auction-api"
+        dapr.io/app-port: "8080"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: auction-api
+        image: joelsmith2019/auction-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

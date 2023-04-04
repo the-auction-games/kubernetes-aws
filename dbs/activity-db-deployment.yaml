@@ -24,6 +24,21 @@ spec:
         env:
           - name: DB_NAME
             value: "activity"
+          - name: DROP_BOX_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: dropbox-secrets
+                key: DROP_BOX_CLIENT_ID
+          - name: DROP_BOX_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: dropbox-secrets
+                key: DROP_BOX_CLIENT_SECRET
+          - name: DROP_BOX_REFRESH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: dropbox-secrets
+                key: DROP_BOX_REFRESH_TOKEN
         resources:
           requests:
             cpu: 100m

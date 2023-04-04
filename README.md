@@ -3,7 +3,7 @@ This repository provides the configuration to deploy TheAuctionGames to a Kubern
 
 ## Deployment
 Please execute the `setup.sh` script to deploy the application to your cluster.  
-Please note that the deployment does require a Kubernetes cluster and Helm to be installed.  
+Please note that the deployment does require a Kubernetes cluster, the Helm CLI, and the Dapr CLI to be installed.  
 
 ## Ingress
 The ingress is configured to use the domain `the-auction-games.com`.  

@@ -25,7 +25,13 @@ kubectl delete -f ./tracing
 # Delete Web App
 kubectl delete -f ./web-app
 
+# Delete Secrets
+kubectl delete secret tls-secret
+rm *.crt *.key
+kubectl delete -f ./secrets
+
 # Uninstall Ingress-Nginx
+kubectl delete secret ingress-nginx-admission
 helm uninstall ingress-nginx
 
 # Uninstall Dapr

@@ -19,6 +19,18 @@ kubectl apply -f ./dapr-components
 # Wait for changes
 ./wait-for-changes.sh
 
+#    ____                     _       
+#   / ___|  ___  ___ _ __ ___| |_ ___ 
+#   \___ \ / _ \/ __| '__/ _ \ __/ __|
+#    ___) |  __/ (__| | |  __/ |_\__ \
+#   |____/ \___|\___|_|  \___|\__|___/
+
+# Create the TLS Certificate
+./create-tls.sh
+
+# Apply the Secrets folder
+kubectl apply -f ./secrets
+
 #    ____        _        _                         
 #   |  _ \  __ _| |_ __ _| |__   __ _ ___  ___  ___ 
 #   | | | |/ _` | __/ _` | '_ \ / _` / __|/ _ \/ __|

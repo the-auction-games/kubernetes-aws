@@ -14,10 +14,6 @@ spec:
     metadata:
       labels:
         app: web-app
-      annotations:
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "web-app"
-        dapr.io/app-port: "80"
     spec:
       containers:
       - name: web-app
@@ -25,11 +21,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:
-        - name: SIDECAR_HOST
-          value: "api.the-auction-games.com"
-        - name: SIDECAR_PORT
-          value: "80"
+        - containerPort: 443
+        volumeMounts:
+        - name: tls-certificate
+          mountPath: "/etc/ssl/tag"
         resources:
           requests:
             cpu: 100m
@@ -37,6 +32,15 @@ spec:
           limits:
             cpu: 200m
             memory: 256Mi
+      volumes:
+      - name: tls-certificate
+        secret:
+          secretName: tls-secret
+          items:
+            - key: tls.crt
+              path: ssl.crt
+            - key: tls.key
+              path: ssl.key
 ---
 # Web App Service
 apiVersion: v1
@@ -48,7 +52,9 @@ spec:
     app: web-app
   ports:
   - name: http
-    protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
   type: ClusterIP

@@ -5,20 +5,16 @@ metadata:
   name: ingress-nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.the-auction-games.com
+    - tracing.the-auction-games.com
+    secretName: tls-secret
   rules:
-  # Ingress for Web Application (Load balance on service)
-  - host: the-auction-games.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: web-app-service
-            port:
-              number: 80
   # Ingress for Sidecar API
   - host: api.the-auction-games.com
     http:
@@ -41,3 +37,28 @@ spec:
             name: zipkin-service
             port:
               number: 80
+---
+# Nginx Ingress to Nginx Rule (Ingress Reverse Proxy for Web Application)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx-to-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  rules:
+  # Ingress for Web Application (Load balance on service)
+  - host: the-auction-games.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-app-service
+            port:
+              name: https

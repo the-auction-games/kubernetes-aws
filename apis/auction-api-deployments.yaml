@@ -19,6 +19,7 @@ spec:
         dapr.io/app-id: "auction-api"
         dapr.io/app-port: "8080"
         dapr.io/config: "tracing"
+        dapr.io/http-max-request-size: "100"
     spec:
       containers:
       - name: auction-api

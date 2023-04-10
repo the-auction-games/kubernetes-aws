@@ -425,6 +425,7 @@ spec:
         dapr.io/app-port: "80"
         dapr.io/sidecar-listen-addresses: "[::],0.0.0.0"
         dapr.io/config: "tracing"
+        dapr.io/http-max-request-size: "100"
     spec:
       containers:
       - args:

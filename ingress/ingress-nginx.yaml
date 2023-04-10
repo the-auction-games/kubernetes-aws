@@ -67,6 +67,10 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - the-auction-games.com
+    secretName: tls-secret
   rules:
   # Ingress for Web Application (Load balance on service)
   - host: the-auction-games.com
@@ -78,4 +82,4 @@ spec:
           service:
             name: web-app-service
             port:
-              name: https
+              number: 443

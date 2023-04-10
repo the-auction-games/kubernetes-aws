@@ -36,8 +36,12 @@ kubectl apply -f ./dapr-components
 #    ___) |  __/ (__| | |  __/ |_\__ \
 #   |____/ \___|\___|_|  \___|\__|___/
 
-# Create the TLS Certificate
-./create-tls.sh
+# Create the TLS Secrets
+SECRET_NAME="tls-secret"
+KEY_FILE="tls.key"
+CERT_FILE="tls.crt"
+kubectl create secret tls $SECRET_NAME --key $KEY_FILE --cert $CERT_FILE -n default
+kubectl create secret tls $SECRET_NAME --key $KEY_FILE --cert $CERT_FILE -n ingress-nginx
 
 # Apply the Secrets folder
 kubectl apply -f ./secrets

@@ -24,10 +24,7 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 200m
-            memory: 256Mi
+            memory: 200Mi
 ---
 # Global Redis DB Service (Actors & PubSub)
 apiVersion: v1

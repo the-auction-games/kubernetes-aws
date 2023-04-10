@@ -1,5 +1,15 @@
 #bin/bash
 
+#    _   _                                                     
+#   | \ | | __ _ _ __ ___   ___  ___ _ __   __ _  ___ ___  ___ 
+#   |  \| |/ _` | '_ ` _ \ / _ \/ __| '_ \ / _` |/ __/ _ \/ __|
+#   | |\  | (_| | | | | | |  __/\__ \ |_) | (_| | (_|  __/\__ \
+#   |_| \_|\__,_|_| |_| |_|\___||___/ .__/ \__,_|\___\___||___/
+#                                   |_|                        
+
+# Create ingress-nginx namespace to configure configs
+kubectl create ns ingress-nginx
+
 #    ____                   
 #   |  _ \  __ _ _ __  _ __ 
 #   | | | |/ _` | '_ \| '__|
@@ -9,6 +19,7 @@
 
 # Init Dapr on Kubernetes (15min wait time max)
 dapr init -k --wait --timeout 900
+
 
 # Deploy Tracing
 kubectl apply -f ./tracing
@@ -75,14 +86,14 @@ kubectl apply -f ./web-app
 #   |___|_| |_|\__, |_|  \___||___/___/
 #              |___/                    
 
-# Install Ingress-Nginx, Inject Dapr Sidecar
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  -f ingress-dapr-injection.yaml \
-  --wait
+# Install AWS Ingress-Nginx, Inject Dapr Sidecar
+kubectl apply -f ingress/aws-setup-ingress-nginx.yaml
+
+# Wait for changes
+./wait-for-changes.sh
 
 # Apply Ingress-Nginx Configuration
-kubectl apply -f ./ingress/
+kubectl apply -f ./ingress/ingress-nginx.yaml
 
 # Wait for changes
 ./wait-for-changes.sh

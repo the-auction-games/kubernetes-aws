@@ -1,8 +1,9 @@
-# Nginx Ingress
+# Nginx Ingress for Dapr Sidecar API
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-nginx
+  name: ingress-nginx-api
+  namespace: ingress-nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -12,7 +13,6 @@ spec:
   tls:
   - hosts:
     - api.the-auction-games.com
-    - tracing.the-auction-games.com
     secretName: tls-secret
   rules:
   # Ingress for Sidecar API
@@ -26,6 +26,23 @@ spec:
             name: ingress-nginx-dapr
             port:
               number: 80
+---
+# Nginx Ingress for Zipkin Tracing
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx-tracing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - tracing.the-auction-games.com
+    secretName: tls-secret
+  rules:
   # Ingress for Zipkin
   - host: tracing.the-auction-games.com
     http:
@@ -42,7 +59,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-nginx-to-nginx
+  name: ingress-nginx-web-app
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"

@@ -30,9 +30,9 @@ kubectl delete secret tls-secret
 rm *.crt *.key
 kubectl delete -f ./secrets
 
-# Uninstall Ingress-Nginx
-kubectl delete secret ingress-nginx-admission
-helm uninstall ingress-nginx
-
 # Uninstall Dapr
 dapr uninstall -k
+
+# Delete Namespaces
+kubectl delete ns dapr-system
+kubectl delete ns ingress-nginx

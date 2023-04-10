@@ -1,7 +1,21 @@
+# Configures Dapr to send tracing data to Zipkin
 apiVersion: dapr.io/v1alpha1
 kind: Configuration
 metadata:
   name: tracing
+  namespace: default
+spec:
+  tracing:
+    samplingRate: "1"
+    zipkin:
+      endpointAddress: http://zipkin-service.default.svc.cluster.local:80/api/v2/spans
+---
+# Add tracing to the ingress-nginx namespace
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: tracing
+  namespace: ingress-nginx
 spec:
   tracing:
     samplingRate: "1"

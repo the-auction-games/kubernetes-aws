@@ -23,17 +23,14 @@ spec:
         - containerPort: 80
         - containerPort: 443
         volumeMounts:
-        - name: tls-certificate
+        - name: tls-secret
           mountPath: "/etc/ssl/tag"
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
             cpu: 200m
-            memory: 256Mi
+            memory: 200Mi
       volumes:
-      - name: tls-certificate
+      - name: tls-secret
         secret:
           secretName: tls-secret
           items:
